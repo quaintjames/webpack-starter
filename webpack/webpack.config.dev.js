@@ -39,7 +39,7 @@ module.exports = merge(common, {
         test: /\.js$/,
         include: Path.resolve(__dirname, '../src'),
         enforce: 'pre',
-        loader: 'eslint-loader',
+        loader: 'eslint-webpack-plugin',
         options: {
           emitWarning: true,
           fix: true,
