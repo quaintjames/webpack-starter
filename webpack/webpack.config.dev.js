@@ -40,6 +40,7 @@ module.exports = merge(common, {
     new ESLintPlugin({
       emitWarning: true,
     }),
+    new MiniCssExtractPlugin({ filename: 'css/app.css', }),
   ],
   module: {
     rules: [
