@@ -42,16 +42,6 @@ module.exports = merge(common, {
   module: {
     rules: [
       {
-        test: /\.js$/,
-        include: Path.resolve(__dirname, '../src'),
-        enforce: 'pre',
-        loader: 'eslint-loader',
-        options: {
-          emitWarning: true,
-          fix: true,
-        },
-      },
-      {
         test: /\.html$/i,
         loader: 'html-loader',
       },
@@ -62,7 +52,17 @@ module.exports = merge(common, {
       },
       {
         test: /\.s?css$/i,
-        use: [MiniCssExtractPlugin.loader, 'css-loader?sourceMap=true', 'postcss-loader', 'sass-loader'],
+        use: [
+          'style-loader',
+          {
+            loader: 'css-loader',
+            options: {
+              sourceMap: true,
+            },
+          },
+          'postcss-loader',
+          'sass-loader',
+        ],
       },
     ],
   },
