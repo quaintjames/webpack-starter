@@ -1,15 +1,14 @@
 const Path = require('path');
 const Webpack = require('webpack');
 const { merge } = require('webpack-merge');
-const ESLintPlugin = require('eslint-webpack-plugin');
 const StylelintPlugin = require('stylelint-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 const common = require('./webpack.common.js');
 
 module.exports = merge(common, {
-  target: 'web',
   mode: 'development',
-  devtool: 'eval-cheap-source-map',
+  devtool: 'inline-cheap-source-map',
   output: {
     chunkFilename: 'js/[name].chunk.js',
   },
@@ -21,20 +20,31 @@ module.exports = merge(common, {
     new Webpack.DefinePlugin({
       'process.env.NODE_ENV': JSON.stringify('development'),
     }),
-    new ESLintPlugin({
-      extensions: 'js',
-      emitWarning: true,
-      files: Path.resolve(__dirname, '../src'),
-    }),
     new StylelintPlugin({
       files: Path.join('src', '**/*.s?(a|c)ss'),
+      config: {
+        "extends": "stylelint-config-standard",
+        rules: {
+          "at-rule-no-unknown": null,
+          "no-descending-specificity": null,
+        }
+      },
+      fix: true,
     }),
-    new ESLintPlugin({
-      emitWarning: true,
-    }),
+    new MiniCssExtractPlugin({ filename: 'css/app.css', })
   ],
   module: {
     rules: [
+      {
+        test: /\.js$/,
+        include: Path.resolve(__dirname, '../src'),
+        enforce: 'pre',
+        loader: 'eslint-loader',
+        options: {
+          emitWarning: true,
+          fix: true,
+        },
+      },
       {
         test: /\.html$/i,
         loader: 'html-loader',
@@ -46,17 +56,7 @@ module.exports = merge(common, {
       },
       {
         test: /\.s?css$/i,
-        use: [
-          'style-loader',
-          {
-            loader: 'css-loader',
-            options: {
-              sourceMap: true,
-            },
-          },
-          'postcss-loader',
-          'sass-loader',
-        ],
+        use: [MiniCssExtractPlugin.loader, 'css-loader?sourceMap=true', 'postcss-loader', 'sass-loader'],
       },
     ],
   },
