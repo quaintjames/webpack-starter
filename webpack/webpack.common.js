@@ -2,7 +2,6 @@ const Path = require('path');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const BundleTracker = require('webpack-bundle-tracker');
 
 module.exports = {
   entry: {
