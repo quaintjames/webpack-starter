@@ -24,6 +24,7 @@ module.exports = {
     new HtmlWebpackPlugin({
       template: Path.resolve(__dirname, '../src/index.html'),
     }),
+    new BundleTracker({ filename: './webpack-stats.json' }),
   ],
   resolve: {
     alias: {
